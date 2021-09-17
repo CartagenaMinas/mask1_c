@@ -6,7 +6,8 @@ from keras.models import load_model
 import pandas as pd    
 import tensorflow as tf
 import numpy as np
-
+import tensorflow as tf
+from skimage import io
 
 from PIL import Image
 
@@ -71,13 +72,13 @@ def main():
         submission=pd.DataFrame({
         "id":uploaded_file.name,"label":preds
         })
-        submission['Resultado'] = submission['label'].apply(np.round)
+        submission['target'] = submission['label'].apply(np.round)
             #CON MASCARA=0 SIN MASCARA=1
-        submission['Resultado'] =submission["Resultado"].replace({1: "Sin_Tapa_Bocas", 0:"Con_Tapa_Bocas"})
+        submission['target'] =submission["target"].replace({1: "Sin_Tapa_Bocas", 0:"Con_Tapa_Bocas"})
 
         st.write(submission)
         image5 = Image.open(uploaded_file)
-        label=submission["Resultado"].values
+        label=submission["target"].values
         st.image(image5, caption=label)
         if label==['Con_Tapa_Bocas']:
             st.markdown("## LA PERSONA LLEVA EL TAPA BOCAS")
@@ -86,19 +87,31 @@ def main():
 
         
     else:
- 
 
-        id1="prueba1.jpg"
-        id2=0.0048
+
+        test_split= pd.DataFrame({"image_name":image1},index=[0])   
+        # Modelo de carga
+        model = load_model('model.h5')
+        test_ds=load_test_ds(test_split)
+        preds = []
+
+        for imgs in test_ds:
+            imgs_lr=tf.image.flip_left_right(imgs)
+            imgs_ud=tf.image.flip_up_down(imgs)
+            _preds=model.predict(imgs)
+            preds += _preds.ravel().tolist()
+        
         submission=pd.DataFrame({
-        "id":id1,"label":id2,
-    }, index=[0])
-        submission['Resultado'] = submission['label'].apply(np.round)
+        "id":test_split["image_name"].values,"label":preds
+    })
+        submission['target'] = submission['label'].apply(np.round)
         #CON MASCARA=0 SIN MASCARA=1
-        submission['Resultado'] =submission["Resultado"].replace({1: "Sin_Tapa_Bocas", 0:"Con_Tapa_Bocas"})
+        submission['target'] =submission["target"].replace({1: "Sin_Tapa_Bocas", 0:"Con_Tapa_Bocas"})
 
+        img=io.imread(f"{image1}")
+        imgplot =plt.imshow(img)
         plt.axis(False)
-        label=submission["Resultado"].values
+        label=submission["target"].values
         plt.title(label)
         plt.show()
 
