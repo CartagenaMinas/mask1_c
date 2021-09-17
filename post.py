@@ -1,9 +1,4 @@
 import streamlit as st
-from PIL import Image
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns; sns.set()
-import pandas as pd
 import streamlit.components.v1 as components
 
     

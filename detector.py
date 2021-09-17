@@ -1,28 +1,15 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-from traitlets.traitlets import default
-import plotly.express as px
 import matplotlib.pyplot as plt
 from keras.models import load_model
-import os       #Me deja operar con la interfaz del sistema
-import zipfile  #Descomprime los archivos
-import pandas as pd    #Me deja trabajar con archivos CSV EXCEL ETC
-import random
+import pandas as pd    
 import tensorflow as tf
-import shutil
 import numpy as np
-from tensorflow.keras.optimizers import RMSprop
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.regularizers import l2
-from shutil import copyfile
-from os import getcwd
 import tensorflow as tf
-from tensorflow import keras
-from tensorflow.keras.applications import ResNet50V2
 import matplotlib.pyplot as plt
 from skimage import io
-import random
+
 from PIL import Image
 
 BATCH_SIZE=1
